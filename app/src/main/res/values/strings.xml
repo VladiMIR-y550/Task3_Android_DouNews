@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DouNews</string>
+    <string name="title_news">Title_news</string>
+    <string name="text_news">Text_news</string>
 </resources>
