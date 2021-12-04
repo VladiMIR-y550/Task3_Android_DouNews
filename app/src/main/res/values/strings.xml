@@ -2,4 +2,6 @@
     <string name="app_name">DouNews</string>
     <string name="title_news">Title_news</string>
     <string name="text_news">Text_news</string>
+
+    <string name="appBar_scrolling_view_behavior">AppBar_scrolling_view_behavior</string>
 </resources>

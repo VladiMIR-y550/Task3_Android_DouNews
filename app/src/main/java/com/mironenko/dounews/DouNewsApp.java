@@ -29,8 +29,8 @@ public class DouNewsApp extends Application {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.dou.ua")
-//                .baseUrl("https://api.dou.ua/articles/")
+//                .baseUrl("https://api.dou.ua")
+                .baseUrl("https://api.dou.ua/articles/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())             //перевращает Gson в объект
                 .build();

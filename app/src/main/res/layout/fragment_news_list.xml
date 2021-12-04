@@ -15,28 +15,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_item"
+            <include layout="@layout/layout_row_view"
                 android:id="@+id/item_1"/>
 
-            <include layout="@layout/layout_item"
+            <include layout="@layout/layout_row_view"
                 android:id="@+id/item_2"/>
 
-            <include layout="@layout/layout_item"
+            <include layout="@layout/layout_row_view"
                 android:id="@+id/item_3"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_4"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_5"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_6"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_7"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_8"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_9"/>
 
-            <include layout="@layout/layout_item"/>
+            <include layout="@layout/layout_row_view"
+                android:id="@+id/item_10"/>
 
         </LinearLayout>
 

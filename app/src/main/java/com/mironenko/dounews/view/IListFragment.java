@@ -1,5 +1,9 @@
 package com.mironenko.dounews.view;
 
 public interface IListFragment extends ILoadingView {
-    void showDetail();
+
+    void uploadArticle(String url);
+
+    void showNewsList();
+
 }

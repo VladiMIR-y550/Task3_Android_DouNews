@@ -12,19 +12,26 @@ import androidx.fragment.app.Fragment;
 import com.mironenko.dounews.databinding.FragmentDetailedNewsBinding;
 import com.mironenko.dounews.presenter.NewsDetailedPresenter;
 
-public class DetailedNewsFragment extends Fragment implements IDetailFragment{
+public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
+    private static final String KEY_LOAD_URL = "loadURL";
     private FragmentDetailedNewsBinding binding;
     private NewsDetailedPresenter detailedPresenter;
+    private final String loadUrl;
 
-    public static DetailedNewsFragment newInstance() {
+    public DetailedNewsFragment(String loadUrl) {
+        this.loadUrl = loadUrl;
+    }
+
+    public static DetailedNewsFragment newInstance(String loadUrl) {
+
         Bundle args = new Bundle();
-
+        args.putString(KEY_LOAD_URL, loadUrl);
         /**
          * TODO put in Bundle
          */
 
-        DetailedNewsFragment fragment = new DetailedNewsFragment();
+        DetailedNewsFragment fragment = new DetailedNewsFragment(loadUrl);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,7 +43,8 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment{
         LayoutInflater inflater = LayoutInflater.from(getContext());
         binding = FragmentDetailedNewsBinding.inflate(inflater);
 
-        detailedPresenter = new NewsDetailedPresenter(this);
+        detailedPresenter = new NewsDetailedPresenter(this, loadUrl);
+        detailedPresenter.loadUrl();
 
     }
 
@@ -56,5 +64,10 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment{
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    public void showDetail(String url) {
+        binding.webViewDetailed.loadUrl(url);
     }
 }

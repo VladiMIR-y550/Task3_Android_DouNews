@@ -9,5 +9,5 @@ public interface IdouApi {
 //    ArticlesListResponse getArticles();
 
     @GET("./articles")
-    Call<ArticlesListResponse> getArticles();
+    Call<ArticlesNewsList> getArticles();
 }
