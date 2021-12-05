@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mironenko.dounews.databinding.LayoutRowViewBinding;
 import com.mironenko.dounews.model.remote.ArticleResult;
-import com.mironenko.dounews.presenter.NewsListPresenter;
+import com.mironenko.dounews.view.news_list.NewsListPresenter;
 
 public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapter.ArticlesViewHolder> {
 
-    private final NewsListPresenter listPresenter;
+    //private final NewsListPresenter listPresenter; List
     private LayoutRowViewBinding binding;
 
     public ArticlesListAdapter(NewsListPresenter listPresenter) {
@@ -42,6 +41,8 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
         holder.bind(article);
 
     }
+
+    public void setData()
 
     @Override
     public int getItemCount() {

@@ -1,4 +1,4 @@
-package com.mironenko.dounews.view;
+package com.mironenko.dounews.view.news_list;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,15 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
 import com.mironenko.dounews.model.InternetConnection;
-import com.mironenko.dounews.presenter.NewsListPresenter;
+import com.mironenko.dounews.view.DetailedNewsFragment;
 import com.mironenko.dounews.view.adapters.ArticlesListAdapter;
 
-public class NewsListFragment extends Fragment implements IListFragment {
+public class NewsListFragment extends Fragment implements INewsListContract.INewsListView {
 
     private final int RESPONSE_SUCCESSFUL = 0;
 
     private FragmentNewsListBinding binding;
-    private NewsListPresenter listPresenter;
+    private INewsListContract.INewsListPresenter listPresenter;
+    private ArticlesListAdapter adapter = new ArticlesListAdapter();
 
     private final Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -68,11 +69,20 @@ public class NewsListFragment extends Fragment implements IListFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
+        binding.recyclerView.setAdapter(adapter);
+
         View view = binding.getRoot();
 
         listPresenter.fetchNewsList();
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        binding = null;
+        super.onDestroy();
     }
 
     @Override
@@ -88,6 +98,8 @@ public class NewsListFragment extends Fragment implements IListFragment {
 
     @Override
     public void showNewsList() {
+        adapter.setData();
+        adapter.notifyDataSetChanged();
         handler.sendEmptyMessage(RESPONSE_SUCCESSFUL);
     }
 

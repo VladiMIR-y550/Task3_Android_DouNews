@@ -8,7 +8,7 @@ import android.view.View;
 import com.mironenko.dounews.databinding.ActivityMainBinding;
 import com.mironenko.dounews.presenter.ActivityPresenter;
 import com.mironenko.dounews.view.IActivityShowList;
-import com.mironenko.dounews.view.NewsListFragment;
+import com.mironenko.dounews.view.news_list.NewsListFragment;
 
 public class MainActivity extends AppCompatActivity implements IActivityShowList {
 

@@ -35,8 +35,8 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
         binding = FragmentDetailedNewsBinding.inflate(inflater);
 
         String loadUrl = requireArguments().getString(KEY_LOAD_URL);
-        NewsDetailedPresenter detailedPresenter = new NewsDetailedPresenter(this, loadUrl);
-        detailedPresenter.loadUrl();
+        NewsDetailedPresenter detailedPresenter = new NewsDetailedPresenter(this);
+        detailedPresenter.loadUrl(loadUrl);
 
     }
 
@@ -44,6 +44,12 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        binding = null;
+        super.onDestroy();
     }
 
     @Override

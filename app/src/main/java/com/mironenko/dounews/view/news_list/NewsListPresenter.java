@@ -1,11 +1,11 @@
-package com.mironenko.dounews.presenter;
+package com.mironenko.dounews.view.news_list;
 
 import androidx.annotation.NonNull;
 
 import com.mironenko.dounews.DouNewsApp;
 import com.mironenko.dounews.model.remote.ArticleResult;
 import com.mironenko.dounews.model.remote.ArticlesNewsList;
-import com.mironenko.dounews.view.IListFragment;
+import com.mironenko.dounews.view.news_list.IListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsListPresenter {
+public class NewsListPresenter implements INewsListContract.INewsListPresenter {
 
-    private final IListFragment iListFragment;
+    private final INewsListContract.INewsListView iListFragment;
     private List<ArticleResult> articlesList;
     private final boolean internetConnection;
 
-    public NewsListPresenter(IListFragment iListFragment, boolean internetConnection) {
+    public NewsListPresenter(INewsListContract.INewsListView iListFragment, boolean internetConnection) {
         this.iListFragment = iListFragment;
         this.internetConnection = internetConnection;
         articlesList = new ArrayList<>();
@@ -50,7 +50,7 @@ public class NewsListPresenter {
                     if (response.isSuccessful() && response.body() != null) {
                         articlesList = response.body().getResults();
 
-                        iListFragment.showNewsList();
+                        iListFragment.showNewsList(articlesList);
                         iListFragment.hideLoading();
                     }
                 }
