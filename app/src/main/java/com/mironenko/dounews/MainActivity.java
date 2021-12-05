@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.ActivityMainBinding;
 import com.mironenko.dounews.presenter.ActivityPresenter;
 import com.mironenko.dounews.view.IActivityShowList;

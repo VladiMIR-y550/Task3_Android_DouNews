@@ -34,7 +34,6 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         binding = FragmentDetailedNewsBinding.inflate(inflater);
 
-
         String loadUrl = requireArguments().getString(KEY_LOAD_URL);
         NewsDetailedPresenter detailedPresenter = new NewsDetailedPresenter(this, loadUrl);
         detailedPresenter.loadUrl();

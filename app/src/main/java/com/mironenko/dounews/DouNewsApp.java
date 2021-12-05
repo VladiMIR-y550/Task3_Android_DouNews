@@ -32,7 +32,7 @@ public class DouNewsApp extends Application {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ROOT_URL)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())             //перевращает Gson в объект
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         idouApi = retrofit.create(IdouApi.class);

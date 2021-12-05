@@ -35,7 +35,6 @@ public class NewsListPresenter {
         if (articlesList != null) {
             iListFragment.uploadArticle(articlesList.get(position).getUrl());
         }
-
     }
 
     public void fetchNewsList() {
