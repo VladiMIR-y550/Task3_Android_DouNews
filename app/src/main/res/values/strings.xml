@@ -4,4 +4,6 @@
     <string name="text_news">Text_news</string>
 
     <string name="appBar_scrolling_view_behavior">AppBar_scrolling_view_behavior</string>
+    <string name="next">next</string>
+    <string name="previous">previous</string>
 </resources>

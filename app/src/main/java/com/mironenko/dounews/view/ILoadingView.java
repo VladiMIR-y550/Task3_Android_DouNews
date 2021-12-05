@@ -5,4 +5,6 @@ public interface ILoadingView {
     void showLoading();
 
     void hideLoading();
+
+    void showError();
 }

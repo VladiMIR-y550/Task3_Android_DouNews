@@ -11,7 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DouNewsApp extends Application {
 
-    public IdouApi idouApi;
+    private static final String ROOT_URL = "https://api.dou.ua";
+    public static IdouApi idouApi;
 
     @Override
     public void onCreate() {
@@ -29,12 +30,12 @@ public class DouNewsApp extends Application {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://api.dou.ua")
-                .baseUrl("https://api.dou.ua/articles/")
+                .baseUrl(ROOT_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())             //перевращает Gson в объект
                 .build();
 
         idouApi = retrofit.create(IdouApi.class);
     }
+
 }

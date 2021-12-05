@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +28,6 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
         Bundle args = new Bundle();
         args.putString(KEY_LOAD_URL, loadUrl);
-        /**
-         * TODO put in Bundle
-         */
 
         DetailedNewsFragment fragment = new DetailedNewsFragment(loadUrl);
         fragment.setArguments(args);
@@ -58,12 +56,17 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
     @Override
     public void showLoading() {
-
+        binding.progressDetailed.progressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
+        binding.progressDetailed.progressLayout.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void showError() {
+        Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
     }
 
     @Override

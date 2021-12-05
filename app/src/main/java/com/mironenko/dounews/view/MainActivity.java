@@ -25,16 +25,6 @@ public class MainActivity extends AppCompatActivity implements IActivityShowList
     }
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
     public void showListNews() {
         NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
         getSupportFragmentManager()

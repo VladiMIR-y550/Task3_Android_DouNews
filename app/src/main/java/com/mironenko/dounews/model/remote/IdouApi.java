@@ -5,9 +5,6 @@ import retrofit2.http.GET;
 
 public interface IdouApi {
 
-//    @GET("./articles")
-//    ArticlesListResponse getArticles();
-
     @GET("./articles")
     Call<ArticlesNewsList> getArticles();
 }

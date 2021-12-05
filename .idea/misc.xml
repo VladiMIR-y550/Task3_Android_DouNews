@@ -4,10 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/activity_main.xml" value="0.5541666666666667" />
+        <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/fragment_articles_list.xml" value="0.31979166666666664" />
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/fragment_detailed_news.xml" value="0.5541666666666667" />
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/fragment_mk_ersion_list.xml" value="0.3307291666666667" />
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/fragment_news_list.xml" value="0.5541666666666667" />
+        <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/fragment_recyclerview.xml" value="0.5541666666666667" />
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/layout_item.xml" value="0.5541666666666667" />
+        <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/layout_loading.xml" value="0.3307291666666667" />
+        <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/layout_recyclerview.xml" value="0.3307291666666667" />
         <entry key="..\:/Java/HomeWork/Task3_Android_DouNews/app/src/main/res/layout/layout_row_view.xml" value="0.3307291666666667" />
       </map>
     </option>

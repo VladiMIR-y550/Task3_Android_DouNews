@@ -1,4 +1,4 @@
-package com.mironenko.dounews.presenter;
+package com.mironenko.dounews.model;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

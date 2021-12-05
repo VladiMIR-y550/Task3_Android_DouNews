@@ -1,6 +1,6 @@
 package com.mironenko.dounews.view;
 
-public interface IActivityShowList extends ILoadingView{
+public interface IActivityShowList {
 
     void showListNews();
 }

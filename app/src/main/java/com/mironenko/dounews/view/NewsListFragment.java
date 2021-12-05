@@ -6,72 +6,69 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
-import com.mironenko.dounews.model.remote.ArticleResult;
-import com.mironenko.dounews.model.remote.ArticlesNewsList;
+import com.mironenko.dounews.model.InternetConnection;
 import com.mironenko.dounews.presenter.NewsListPresenter;
+import com.mironenko.dounews.view.adapters.ArticlesListAdapter;
 
-import java.util.List;
+public class NewsListFragment extends Fragment implements IListFragment {
 
-public class NewsListFragment extends Fragment implements IListFragment, View.OnClickListener {
+    private final int RESPONSE_SUCCESSFUL = 0;
 
     private FragmentNewsListBinding binding;
     private NewsListPresenter listPresenter;
 
-
-    private Handler handler = new Handler(new Handler.Callback() {
+    private final Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
-            if (message.what == 0) {
-                binding.item1.textViewName.setText(listPresenter.getArticlesList().get(10).getAuthorName());
-            }
-//            ArticleResult articleItems = (ArticleResult) message.obj;
-//            binding.item1.tvTitle.setText(articleItems.getTitle());
-//            binding.item1.tvShortText.setText(articleItems.getAuthorName());
 
+            if (message.what == RESPONSE_SUCCESSFUL) {
+                ArticlesListAdapter adapter = new ArticlesListAdapter(listPresenter);
+                binding.recyclerView.setAdapter(adapter);
+            }
             return false;
         }
     });
 
-    public static Fragment newInstance() {
+
+    public static NewsListFragment newInstance() {
+
         Bundle args = new Bundle();
-
-        /**
-         * TODO put in Bundle
-         */
-
         NewsListFragment fragment = new NewsListFragment();
         fragment.setArguments(args);
-
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         LayoutInflater inflater = LayoutInflater.from(getContext());
         binding = FragmentNewsListBinding.inflate(inflater);
 
-        listPresenter = new NewsListPresenter(handler, this, getActivity().getApplicationContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setHasFixedSize(true);
 
-
+        if (getContext() != null) {
+            boolean internetConnection = InternetConnection.checkConnection(getContext());
+            listPresenter = new NewsListPresenter(this, internetConnection);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = binding.getRoot();
 
-        binding.item1.getRoot().setOnClickListener(this);
-        binding.item2.getRoot().setOnClickListener(this);
-        binding.item3.getRoot().setOnClickListener(this);
+        View view = binding.getRoot();
 
         listPresenter.fetchNewsList();
 
@@ -79,22 +76,8 @@ public class NewsListFragment extends Fragment implements IListFragment, View.On
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.item_1:
-                listPresenter.chooseNews(0);
-                break;
-            case R.id.item_3:
-                listPresenter.chooseNews(1);
-                break;
-            case R.id.item_2:
-                listPresenter.chooseNews(2);
-                break;
-        }
-    }
-
-    @Override
     public void uploadArticle(String url) {
+
         DetailedNewsFragment detailedNewsFragment = DetailedNewsFragment.newInstance(url);
         getParentFragmentManager()
                 .beginTransaction()
@@ -105,22 +88,26 @@ public class NewsListFragment extends Fragment implements IListFragment, View.On
 
     @Override
     public void showNewsList() {
-        /**
-         * TODO не знаю для чего
-         */
+        handler.sendEmptyMessage(RESPONSE_SUCCESSFUL);
     }
 
     @Override
     public void showLoading() {
-/**
- * TODO показать индикатор загрпузки после выбора новости
- */
+
+        binding.progressNewsList.progressLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void hideLoading() {
-/**
- * TODO скрыть индикатор загрпузки после обнаружения новости перед показом деталей
- */
+
+        binding.progressNewsList.progressLayout.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void showError() {
+
+        Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
     }
 }
