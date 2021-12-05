@@ -17,19 +17,12 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
     private static final String KEY_LOAD_URL = "loadURL";
     private FragmentDetailedNewsBinding binding;
-    private NewsDetailedPresenter detailedPresenter;
-    private final String loadUrl;
-
-    public DetailedNewsFragment(String loadUrl) {
-        this.loadUrl = loadUrl;
-    }
 
     public static DetailedNewsFragment newInstance(String loadUrl) {
 
         Bundle args = new Bundle();
         args.putString(KEY_LOAD_URL, loadUrl);
-
-        DetailedNewsFragment fragment = new DetailedNewsFragment(loadUrl);
+        DetailedNewsFragment fragment = new DetailedNewsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,7 +34,9 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         binding = FragmentDetailedNewsBinding.inflate(inflater);
 
-        detailedPresenter = new NewsDetailedPresenter(this, loadUrl);
+
+        String loadUrl = requireArguments().getString(KEY_LOAD_URL);
+        NewsDetailedPresenter detailedPresenter = new NewsDetailedPresenter(this, loadUrl);
         detailedPresenter.loadUrl();
 
     }
@@ -49,9 +44,7 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = binding.getRoot();
-
-        return view;
+        return binding.getRoot();
     }
 
     @Override

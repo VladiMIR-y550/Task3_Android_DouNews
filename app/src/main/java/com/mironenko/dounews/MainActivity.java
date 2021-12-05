@@ -1,4 +1,4 @@
-package com.mironenko.dounews.view;
+package com.mironenko.dounews;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.ActivityMainBinding;
 import com.mironenko.dounews.presenter.ActivityPresenter;
+import com.mironenko.dounews.view.IActivityShowList;
+import com.mironenko.dounews.view.NewsListFragment;
 
 public class MainActivity extends AppCompatActivity implements IActivityShowList {
 
@@ -20,8 +22,11 @@ public class MainActivity extends AppCompatActivity implements IActivityShowList
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        presenter = new ActivityPresenter(this);
-        presenter.start();
+
+        if (savedInstanceState == null) {
+            presenter = new ActivityPresenter(this);
+            presenter.start();
+        }
     }
 
     @Override
@@ -31,5 +36,12 @@ public class MainActivity extends AppCompatActivity implements IActivityShowList
                 .beginTransaction()
                 .add(R.id.fragment_container, newsListFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        binding = null;
+        presenter = null;
+        super.onDestroy();
     }
 }

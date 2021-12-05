@@ -65,7 +65,7 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
         void bind(ArticleResult articleResult) {
 
             textView1.setText(articleResult.getTitle());
-            textView2.setText(articleResult.getAnnouncement());
+            textView2.setText(articleResult.getPublished());
 
         }
 
