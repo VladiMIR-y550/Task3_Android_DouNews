@@ -8,12 +8,14 @@ import android.view.View;
 import com.mironenko.dounews.databinding.ActivityMainBinding;
 import com.mironenko.dounews.presenter.ActivityPresenter;
 import com.mironenko.dounews.view.IActivityShowList;
+import com.mironenko.dounews.view.IScreenManager;
 import com.mironenko.dounews.view.news_list.NewsListFragment;
 
-public class MainActivity extends AppCompatActivity implements IActivityShowList {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ActivityPresenter presenter;
+    private IScreenManager screenManager = new ScreenManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,20 +24,25 @@ public class MainActivity extends AppCompatActivity implements IActivityShowList
         View view = binding.getRoot();
         setContentView(view);
 
-        if (savedInstanceState == null) {
-            presenter = new ActivityPresenter(this);
-            presenter.start();
-        }
+
+        NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
+        screenManager.changeScreen(newsListFragment);
+
+
+//        if (savedInstanceState == null) {
+//            presenter = new ActivityPresenter(this);
+//            presenter.start();
+//        }
     }
 
-    @Override
-    public void showListNews() {
-        NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, newsListFragment)
-                .commit();
-    }
+//    @Override
+//    public void showListNews() {
+//        NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .add(R.id.fragment_container, newsListFragment)
+//                .commit();
+//    }
 
     @Override
     protected void onDestroy() {

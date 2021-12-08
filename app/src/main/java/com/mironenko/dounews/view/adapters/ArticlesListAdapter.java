@@ -15,7 +15,7 @@ import com.mironenko.dounews.view.news_list.NewsListPresenter;
 
 public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapter.ArticlesViewHolder> {
 
-    //private final NewsListPresenter listPresenter; List
+    private final NewsListPresenter listPresenter;
     private LayoutRowViewBinding binding;
 
     public ArticlesListAdapter(NewsListPresenter listPresenter) {
@@ -42,7 +42,9 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
 
     }
 
-    public void setData()
+    public void setData() {
+
+    }
 
     @Override
     public int getItemCount() {

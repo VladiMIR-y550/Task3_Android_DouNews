@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
 import com.mironenko.dounews.model.InternetConnection;
-import com.mironenko.dounews.view.DetailedNewsFragment;
+import com.mironenko.dounews.view.news_detailed.DetailedNewsFragment;
 import com.mironenko.dounews.view.adapters.ArticlesListAdapter;
 
 public class NewsListFragment extends Fragment implements INewsListContract.INewsListView {

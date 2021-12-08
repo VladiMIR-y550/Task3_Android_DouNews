@@ -1,4 +1,4 @@
-package com.mironenko.dounews.view;
+package com.mironenko.dounews.view.news_detailed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.mironenko.dounews.databinding.FragmentDetailedNewsBinding;
-import com.mironenko.dounews.presenter.NewsDetailedPresenter;
 
 public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
