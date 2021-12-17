@@ -1,7 +1,5 @@
 package com.mironenko.dounews.newsListScreen;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.mironenko.dounews.DouNewsApp;
@@ -59,6 +57,5 @@ public class NewsListPresenter extends BasePresenter<Article, INewsListContract.
     public void articleSelected(int position) {
         String urlNews = newsBase.getAllNews().get(position).getUrl();
         getView().showDetailedNews(urlNews);
-        Log.d("Mvp NewsListPresenter", " articleSelected() - " + urlNews);
     }
 }

@@ -6,6 +6,7 @@ import com.mironenko.dounews.mvpBase.IMvpBaseView;
 import java.util.List;
 
 public interface INewsListContract {
+
     interface IView extends IMvpBaseView {
         void showNewsList(List<Article> newsList);
         void showDetailedNews(String selectedNews);
