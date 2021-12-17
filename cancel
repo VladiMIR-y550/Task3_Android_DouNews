@@ -1,0 +1,59 @@
+[33mcommit 46c4a0b7c8dd4e6e75e3ea06509d26801396c1c8[m[33m ([m[1;36mHEAD -> [m[1;32mmvpBaseAdd[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Fri Dec 17 19:23:41 2021 +0200
+
+    mvp done
+
+[33mcommit 6989c6da26e17c7b1fd3598f1fc39615be7b6f86[m[33m ([m[1;32mfix08.12[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Wed Dec 8 21:52:07 2021 +0200
+
+    добавил в Activity ScreenManager
+
+[33mcommit 67156e2abef75c391e061eb8437ffb21cb66384e[m[33m ([m[1;32mbugFix05.12[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Sun Dec 5 22:13:11 2021 +0200
+
+    правки после согвона
+
+[33mcommit a4d16b239f5fcfa846e3b3d372c54c3e82b80007[m[33m ([m[1;32msimpleRetrofitRefactor[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Sun Dec 5 19:26:47 2021 +0200
+
+    мелкие недоработки
+
+[33mcommit b5c94903a22062d02600580fcfafad6b7d14c787[m[33m ([m[1;31morigin/developer[m[33m, [m[1;32mdeveloper[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Sun Dec 5 18:36:12 2021 +0200
+
+    rotate sreen work
+
+[33mcommit 7290f34d7aea7b998d90f2baf25c6752d7fa12ae[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Sun Dec 5 17:56:17 2021 +0200
+
+    all work without pagging
+
+[33mcommit 821139dae45b342c4e409c21eda86a1f66dfb331[m[33m ([m[1;32msimpleRetrofit[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Sun Dec 5 01:34:28 2021 +0200
+
+    retrofit work but only first item
+
+[33mcommit b837a6d4c1f01e3043d93e75be4a29c3420f85b5[m[33m ([m[1;32mappRetrofit2[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Fri Dec 3 16:39:51 2021 +0200
+
+    application in manifest for instance Retrofit
+
+[33mcommit b0220ba4e512fe8c5989000f975132d1a1747ed8[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: VladiMIR-y550 <mironenko.vladimir2019@gmail.com>
+Date:   Mon Nov 22 00:51:45 2021 +0200
+
+    create basic project
+
+[33mcommit 82ef39dac8f94ad5f2c694755c40f834b1a01557[m
+Author: Vladimir <76643262+VladiMIR-y550@users.noreply.github.com>
+Date:   Mon Nov 22 00:49:43 2021 +0200
+
+    Create README

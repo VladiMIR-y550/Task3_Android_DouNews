@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.LayoutRecyclerItemBinding;
 import com.mironenko.dounews.model.remote.Article;
 import com.mironenko.dounews.mvpBase.IMvpBaseView;
@@ -54,7 +53,7 @@ public class NewsRecyclerAdapter extends MvcBaseRecyclerAdapter<Article, NewsRec
         setArticlesList(newsBase);
     }
 
-    class NewsViewHolder extends MvpViewHolder<NewsListPresenter> implements IMvpBaseView, View.OnClickListener {
+    class NewsViewHolder extends MvpViewHolder<NewsListPresenter> implements View.OnClickListener {
 
         private final TextView articleTitle;
         private final TextView articleDatePublished;
@@ -62,8 +61,8 @@ public class NewsRecyclerAdapter extends MvcBaseRecyclerAdapter<Article, NewsRec
         public NewsViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.articleTitle = (TextView) itemView.findViewById(R.id.tv_Title);
-            this.articleDatePublished = (TextView) itemView.findViewById(R.id.tv_Published);
+            articleTitle = binding.tvTitle;
+            articleDatePublished = binding.tvPublished;
 
             itemView.setOnClickListener(this);
         }
@@ -75,27 +74,10 @@ public class NewsRecyclerAdapter extends MvcBaseRecyclerAdapter<Article, NewsRec
         }
 
         @Override
-        public void showLoading() {
-            binding.progressItem.progressLayout.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void hideLoading() {
-            binding.progressItem.progressLayout.setVisibility(View.GONE);
-        }
-
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void showError() {
-            binding.tvPublished.setText("Something went wrong...");
-        }
-
-        @Override
         public void onClick(View v) {
             if(listener != null) {
                 listener.onArticleSelected(getAdapterPosition());
             }
         }
     }
-
 }

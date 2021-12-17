@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="TextView_name"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:textAppearance="?android:textAppearanceSmall" />
 
         <TextView
             android:id="@+id/tv_Published"
@@ -32,10 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="TextView_email"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:textAppearance="?android:textAppearanceSmall" />
     </LinearLayout>
-
-    <include layout="@layout/layout_loading"
-        android:id="@+id/progress_item"/>
 
 </LinearLayout>
