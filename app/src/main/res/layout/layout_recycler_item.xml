@@ -19,7 +19,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewTitle"
+            android:id="@+id/tv_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -27,12 +27,15 @@
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/textViewAnnouncement"
+            android:id="@+id/tv_Published"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="TextView_email"
             android:textAppearance="?android:textAppearanceMedium" />
     </LinearLayout>
+
+    <include layout="@layout/layout_loading"
+        android:id="@+id/progress_item"/>
 
 </LinearLayout>

@@ -1,7 +1,6 @@
-package com.mironenko.dounews.view;
+package com.mironenko.dounews.mvpBase;
 
-public interface ILoadingView {
-
+public interface IMvpBaseView {
     void showLoading();
 
     void hideLoading();

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArticlesNewsList {
-
     @SerializedName("count")
     @Expose
     private Integer count;
@@ -19,7 +18,7 @@ public class ArticlesNewsList {
     private String previous;
     @SerializedName("results")
     @Expose
-    private List<ArticleResult> results = new ArrayList<>();
+    private List<Article> results = new ArrayList<>();
 
     public Integer getCount() {
         return count;
@@ -45,11 +44,11 @@ public class ArticlesNewsList {
         this.previous = previous;
     }
 
-    public List<ArticleResult> getResults() {
+    public List<Article> getResults() {
         return results;
     }
 
-    public void setResults(List<ArticleResult> results) {
+    public void setResults(List<Article> results) {
         this.results = results;
     }
 }

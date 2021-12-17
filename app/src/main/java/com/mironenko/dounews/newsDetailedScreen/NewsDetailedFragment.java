@@ -1,4 +1,4 @@
-package com.mironenko.dounews.view.news_detailed;
+package com.mironenko.dounews.newsDetailedScreen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.mironenko.dounews.InternetConnection;
 import com.mironenko.dounews.databinding.FragmentDetailedNewsBinding;
 
-public class DetailedNewsFragment extends Fragment implements IDetailFragment {
+public class NewsDetailedFragment extends Fragment implements INewsDetailedContract.IView {
+    private final String KEY_URL_NEWS = "Url news";
 
-    private static final String KEY_LOAD_URL = "loadURL";
     private FragmentDetailedNewsBinding binding;
+    private final INewsDetailedContract.IPresenter detailedPresenter = new NewsDetailedPresenter();
 
-    public static DetailedNewsFragment newInstance(String loadUrl) {
-
+    public static NewsDetailedFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString(KEY_LOAD_URL, loadUrl);
-        DetailedNewsFragment fragment = new DetailedNewsFragment();
+        NewsDetailedFragment fragment = new NewsDetailedFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,25 +30,43 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        binding = FragmentDetailedNewsBinding.inflate(inflater);
+        detailedPresenter.attachView(this);
 
-        String loadUrl = requireArguments().getString(KEY_LOAD_URL);
-        NewsDetailedPresenter detailedPresenter = new NewsDetailedPresenter(this);
-        detailedPresenter.loadUrl(loadUrl);
+        if (getArguments() != null) {
+            String urlNews = getArguments().getString(KEY_URL_NEWS);
+            detailedPresenter.urlReceived(urlNews);
+        }
 
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailedNewsBinding.inflate(inflater);
+
+        if (InternetConnection.checkConnection(requireContext())) {
+            detailedPresenter.downloadNewsDetailed();
+        }
+
         return binding.getRoot();
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
     public void onDestroy() {
+        detailedPresenter.detachView();
         binding = null;
         super.onDestroy();
+    }
+
+    @Override
+    public void showNewsDetailed(String urlNewsDetailed) {
+        binding.webViewDetailed.loadUrl(urlNewsDetailed);
     }
 
     @Override
@@ -63,11 +81,6 @@ public class DetailedNewsFragment extends Fragment implements IDetailFragment {
 
     @Override
     public void showError() {
-        Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showDetail(String url) {
-        binding.webViewDetailed.loadUrl(url);
+        Toast.makeText(getContext(), "Something went wrong...", Toast.LENGTH_SHORT).show();
     }
 }

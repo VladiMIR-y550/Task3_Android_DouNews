@@ -1,53 +1,58 @@
 package com.mironenko.dounews;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.view.View;
-
 import com.mironenko.dounews.databinding.ActivityMainBinding;
-import com.mironenko.dounews.presenter.ActivityPresenter;
-import com.mironenko.dounews.view.IActivityShowList;
-import com.mironenko.dounews.view.IScreenManager;
-import com.mironenko.dounews.view.news_list.NewsListFragment;
+import com.mironenko.dounews.newsDetailedScreen.NewsDetailedFragment;
+import com.mironenko.dounews.newsListScreen.NewsListFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewsListFragment.OnNewsSelectedListener {
+    private final String KEY_URL_NEWS = "Url news";
 
     private ActivityMainBinding binding;
-    private ActivityPresenter presenter;
-    private IScreenManager screenManager = new ScreenManager();
+    private final NewsListFragment listFragment = NewsListFragment.newInstance();
+    private final NewsDetailedFragment detailedFragment = NewsDetailedFragment.newInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-
-
-        NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
-        screenManager.changeScreen(newsListFragment);
-
-
-//        if (savedInstanceState == null) {
-//            presenter = new ActivityPresenter(this);
-//            presenter.start();
-//        }
+        setContentView(binding.getRoot());
+        if (savedInstanceState == null) {
+            showList();
+        }
     }
 
-//    @Override
-//    public void showListNews() {
-//        NewsListFragment newsListFragment = (NewsListFragment) NewsListFragment.newInstance();
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .add(R.id.fragment_container, newsListFragment)
-//                .commit();
-//    }
+    @Override
+    public void newsSelected(String urlNews) {
+        showDetailed(urlNews);
+    }
 
     @Override
     protected void onDestroy() {
         binding = null;
-        presenter = null;
         super.onDestroy();
+    }
+
+    private void showList() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, listFragment)
+                .commit();
+    }
+
+    private void showDetailed(String urlNews) {
+        Bundle args = new Bundle();
+        args.putString(KEY_URL_NEWS, urlNews);
+        detailedFragment.setArguments(args);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, detailedFragment)
+                .commit();
     }
 }

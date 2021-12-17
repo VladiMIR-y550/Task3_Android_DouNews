@@ -2,7 +2,7 @@ package com.mironenko.dounews;
 
 import android.app.Application;
 
-import com.mironenko.dounews.model.remote.IdouApi;
+import com.mironenko.dounews.model.remote.IDouApi;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DouNewsApp extends Application {
 
     private static final String ROOT_URL = "https://api.dou.ua";
-    public static IdouApi idouApi;
+    public static IDouApi idouApi;
 
     @Override
     public void onCreate() {
@@ -35,7 +35,7 @@ public class DouNewsApp extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        idouApi = retrofit.create(IdouApi.class);
+        idouApi = retrofit.create(IDouApi.class);
     }
 
 }
