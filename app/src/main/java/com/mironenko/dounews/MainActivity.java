@@ -5,8 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mironenko.dounews.databinding.ActivityMainBinding;
-import com.mironenko.dounews.newsDetailedScreen.NewsDetailedFragment;
-import com.mironenko.dounews.newsListScreen.NewsListFragment;
+import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
+import com.mironenko.dounews.UI.newsListScreen.NewsListFragment;
 
 public class MainActivity extends AppCompatActivity implements NewsListFragment.OnNewsSelectedListener {
     private final String KEY_URL_NEWS = "Url news";

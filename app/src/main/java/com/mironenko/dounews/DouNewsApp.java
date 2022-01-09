@@ -7,11 +7,12 @@ import com.mironenko.dounews.model.remote.IDouApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DouNewsApp extends Application {
 
-    private static final String ROOT_URL = "https://api.dou.ua";
+    private static final String ROOT_URL = "https://api.dou.ua/";
     public static IDouApi idouApi;
 
     @Override
@@ -28,11 +29,11 @@ public class DouNewsApp extends Application {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ROOT_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
 
         idouApi = retrofit.create(IDouApi.class);

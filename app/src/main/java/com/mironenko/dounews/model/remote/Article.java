@@ -3,6 +3,11 @@ package com.mironenko.dounews.model.remote;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Article {
     @SerializedName("id")
     @Expose
@@ -180,4 +185,5 @@ public class Article {
     public void setPublished(String published) {
         this.published = published;
     }
+
 }
