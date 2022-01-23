@@ -1,12 +1,7 @@
-package com.mironenko.dounews.model.remote;
+package com.mironenko.dounews.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Article {
     @SerializedName("id")

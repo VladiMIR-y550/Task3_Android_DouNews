@@ -9,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.LayoutArticleCardBinding;
-import com.mironenko.dounews.model.remote.Article;
+import com.mironenko.dounews.model.Article;
 import com.squareup.picasso.Picasso;
 
 public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdapter.NewsViewHolder> {
@@ -28,7 +30,6 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
 
     public NewsPagingAdapter(@NonNull DiffUtil.ItemCallback<Article> diffCallback) {
         super(diffCallback);
-        Log.d("Paging", "NextPagingAdapter constructor args" + diffCallback);
     }
 
     public void setListener(OnItemClickedListener l) {
@@ -53,7 +54,6 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
     class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView articleTitle;
-        private final TextView articleDatePublished;
         private final TextView articleAuthorName;
         private final TextView articlePostViews;
         private final TextView articleTag;
@@ -64,7 +64,6 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
             super(itemView);
 
             articleTitle = bindingCard.tvTitle;
-            articleDatePublished = bindingCard.tvDatePablisher;
             articleAuthorName = bindingCard.tvAuthorName;
             articlePostViews = bindingCard.tvPageViews;
             articleTag = bindingCard.tvTags;
@@ -76,11 +75,15 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
         @SuppressLint("SetTextI18n")
         public void bind(Article item) {
             articleTitle.setText(item.getTitle().trim());
-            articleDatePublished.setText(item.getPublished());
-            articleAuthorName.setText(item.getAuthorName());
+            articleAuthorName.setText("Автор: " + item.getAuthorName());
             articlePostViews.setText("Просмотров: " + item.getPageviews());
             articleTag.setText("Теги: " + item.getTags());
-            Picasso.get().load(item.getImgBig2x()).into(articleImageTitle);
+
+            if (item.getImgBig2x() == null || item.getImgBig2x().equals("")) {
+                Picasso.get().load(R.mipmap.ic_launcher).into(articleImageTitle);
+            } else {
+                Picasso.get().load(item.getImgBig2x()).into(articleImageTitle);
+            }
             urlArticle = item.getUrl();
         }
 

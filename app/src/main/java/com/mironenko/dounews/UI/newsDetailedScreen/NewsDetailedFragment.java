@@ -26,9 +26,10 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailedNewsBinding.inflate(inflater);
 
         detailedPresenter.attachView(this);
 
@@ -36,12 +37,6 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
             String urlNews = getArguments().getString(KEY_URL_NEWS);
             detailedPresenter.urlReceived(urlNews);
         }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentDetailedNewsBinding.inflate(inflater);
 
         if (InternetConnection.checkConnection(requireContext())) {
             detailedPresenter.downloadNewsDetailed();
@@ -51,16 +46,10 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         detailedPresenter.detachView();
         binding = null;
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Override
@@ -69,13 +58,12 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
     }
 
     @Override
-    public void showLoading() {
-        binding.progressDetailed.progressLayout.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoading() {
-        binding.progressDetailed.progressLayout.setVisibility(View.GONE);
+    public void showLoading(boolean showProgress) {
+        if (showProgress) {
+            binding.progressDetailed.progressLayout.setVisibility(View.VISIBLE);
+        } else {
+            binding.progressDetailed.progressLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

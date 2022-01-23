@@ -2,7 +2,7 @@ package com.mironenko.dounews;
 
 import android.app.Application;
 
-import com.mironenko.dounews.model.remote.IDouApi;
+import com.mironenko.dounews.model.IDouApi;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

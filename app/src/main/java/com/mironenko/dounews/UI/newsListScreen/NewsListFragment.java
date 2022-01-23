@@ -1,8 +1,7 @@
 package com.mironenko.dounews.UI.newsListScreen;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +12,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mironenko.dounews.InternetConnection;
+import com.mironenko.dounews.R;
+import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
 import com.mironenko.dounews.UI.newsListScreen.adapter.ArticleComparator;
 import com.mironenko.dounews.UI.newsListScreen.adapter.NewsLoadStateAdapter;
 import com.mironenko.dounews.UI.newsListScreen.adapter.NewsPagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
-import com.mironenko.dounews.model.remote.Article;
+import com.mironenko.dounews.model.Article;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.Consumer;
 
-public class NewsListFragment extends Fragment implements INewsListContract.IView, NewsPagingAdapter.OnItemClickedListener, NewsLoadStateAdapter.OnRetryClickListener {
+public class NewsListFragment extends Fragment implements INewsListContract.IView,
+        NewsPagingAdapter.OnItemClickedListener,
+        NewsLoadStateAdapter.OnRetryClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
-    public interface OnNewsSelectedListener {
-        void newsSelected(String urlNews);
-    }
-
-    private OnNewsSelectedListener onNewsSelectedListener;
+    private final String KEY_SCROLL_STATE = "RecyclerView State";
+    private final String KEY_URL_NEWS = "Url news";
     private FragmentNewsListBinding binding;
     private final INewsListContract.IPresenter listPresenter = new NewsListPresenter();
 
@@ -43,29 +46,24 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         return fragment;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        onNewsSelectedListener = (OnNewsSelectedListener) getActivity();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        binding = FragmentNewsListBinding.inflate(inflater);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentNewsListBinding.inflate(inflater);
+
         listPresenter.attachView(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        if (savedInstanceState != null) {
+            Parcelable state = savedInstanceState.getParcelable(KEY_SCROLL_STATE);
+            layoutManager.onRestoreInstanceState(state);
+        }
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
 
         pagingAdapter = new NewsPagingAdapter(new ArticleComparator());
+        pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         binding.recyclerView.setAdapter(pagingAdapter.withLoadStateHeaderAndFooter(new NewsLoadStateAdapter(this),
                 new NewsLoadStateAdapter(this)));
 
@@ -73,31 +71,34 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
             listPresenter.downloadNewsList();
         }
         pagingAdapter.setListener(this);
+        binding.swipeRefresh.setOnRefreshListener(this);
 
         return binding.getRoot();
     }
 
     @Override
     public void onArticleSelected(String urlArticle) {
-        listPresenter.articleSelected(urlArticle);
+        NewsDetailedFragment detailedFragment = NewsDetailedFragment.newInstance();
+        Bundle args = new Bundle();
+        args.putString(KEY_URL_NEWS, urlArticle);
+        detailedFragment.setArguments(args);
+
+        getParentFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, detailedFragment)
+                .commit();
     }
 
     @Override
     public void retryClicked() {
         pagingAdapter.retry();
-        Toast.makeText(getContext(), "Retry Button clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showLoading() {
-        binding.progressNewsList.progressLayout.setVisibility(View.VISIBLE);
+    public void showLoading(boolean showProgress) {
+        binding.swipeRefresh.setRefreshing(showProgress);
     }
-
-    @Override
-    public void hideLoading() {
-        binding.progressNewsList.progressLayout.setVisibility(View.GONE);
-    }
-
 
     @Override
     public void showError() {
@@ -105,35 +106,33 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
-    public void showDetailedNews(String urlNewsDetailed) {
-        onNewsSelectedListener.newsSelected(urlNewsDetailed);
-    }
-
-    @Override
     public void subscribeNews(Flowable<PagingData<Article>> articlePagingDataFlowable) {
-        Log.d("Paging", "SubscribeNews() = " + articlePagingDataFlowable);
 
         articlePagingDataFlowable
                 .subscribe(new Consumer<PagingData<Article>>() {
                     @Override
                     public void accept(PagingData<Article> articlePagingData) {
                         pagingAdapter.submitData(NewsListFragment.this.getLifecycle(), articlePagingData);
-
-                        Log.d("Paging", "SubscribeNews() -> accept = " + articlePagingDataFlowable.map(Article -> articlePagingData));
                     }
                 });
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onRefresh() {
+        listPresenter.downloadNewsList();
     }
 
     @Override
-    public void onDestroy() {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_SCROLL_STATE, binding.recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onDestroyView() {
         binding = null;
         listPresenter.detachView();
         pagingAdapter = null;
-        super.onDestroy();
+        super.onDestroyView();
     }
 }

@@ -11,14 +11,14 @@ public class NewsDetailedPresenter extends BasePresenter<String, INewsDetailedCo
 
     @Override
     public void downloadNewsDetailed() {
-        view.showLoading();
+        view.showLoading(true);
 
         if (view != null) {
             view.showNewsDetailed(model);
-            view.hideLoading();
+            view.showLoading(false);
 
         } else {
-            view.hideLoading();
+            view.showLoading(false);
             view.showError();
         }
     }

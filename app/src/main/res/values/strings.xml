@@ -14,4 +14,6 @@
     <string name="news">News</string>
     <string name="error_message">Error message</string>
     <string name="retry">Retry</string>
+    <string name="news_image">News image</string>
+
 </resources>

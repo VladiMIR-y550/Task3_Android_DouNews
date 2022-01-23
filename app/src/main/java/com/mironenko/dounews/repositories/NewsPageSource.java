@@ -2,7 +2,6 @@ package com.mironenko.dounews.repositories;
 
 import static com.mironenko.dounews.DouNewsApp.idouApi;
 
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,77 +9,82 @@ import androidx.annotation.Nullable;
 import androidx.paging.PagingState;
 import androidx.paging.rxjava3.RxPagingSource;
 
-import com.mironenko.dounews.model.remote.Article;
-import com.mironenko.dounews.model.remote.ArticlesNewsList;
+import com.mironenko.dounews.model.Article;
+import com.mironenko.dounews.model.ArticlesNewsList;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class NewsPageSource extends RxPagingSource<String, Article> {
+public class NewsPageSource extends RxPagingSource<Integer, Article> {
+
+    private int pageSize;
+    private int page;
 
     @Nullable
     @Override
-    public String getRefreshKey(@NonNull PagingState<String, Article> pagingState) {
+    public Integer getRefreshKey(@NonNull PagingState<Integer, Article> pagingState) {
+
+        Log.d("Paging", "get Refresh Key Start = " + pagingState.getAnchorPosition());
+
         Integer anchorPosition = pagingState.getAnchorPosition();
         if (anchorPosition == null) {
             return null;
         }
 
-        LoadResult.Page<String, Article> anchorPage = pagingState.closestPageToPosition(anchorPosition);
+        LoadResult.Page<Integer, Article> anchorPage = pagingState.closestPageToPosition(anchorPosition);
         if (anchorPage == null) {
             return null;
         }
 
-        String prevKey = anchorPage.getPrevKey();
+        Integer prevKey = anchorPage.getPrevKey();
         if (prevKey != null) {
-            return prevKey;
+            Log.d("Paging", "get Refresh Key prevKey + pageSize = " + (prevKey + pageSize));
+            return prevKey + pageSize;
         }
 
-        String nextKey = anchorPage.getNextKey();
+        Integer nextKey = anchorPage.getNextKey();
         if (nextKey != null) {
-            return nextKey;
+            Log.d("Paging", "get Refresh Key prevKey - pageSize = " + (nextKey - pageSize));
+            return nextKey - pageSize;
         }
-
         return null;
     }
 
     @NonNull
     @Override
-    public Single<LoadResult<String, Article>> loadSingle(@NonNull LoadParams<String> loadParams) {
+    public Single<LoadResult<Integer, Article>> loadSingle(@NonNull LoadParams<Integer> loadParams) {
         try {
-            Log.d("Paging", "Ключь получаемый от loadParams.getKey = " + getQueryPage(loadParams.getKey()));
+            pageSize = loadParams.getLoadSize();
+            page = loadParams.getKey() != null ? loadParams.getKey() : pageSize;
 
-            String page = loadParams.getKey() != null ? getQueryPage(loadParams.getKey()) : null;
-            String loadSize = String.valueOf(loadParams.getLoadSize());
-
-            Single<LoadResult<String, Article>> loadResultSingle = null;
-                loadResultSingle = idouApi.getNextArticlesStringObservable(loadSize, page)
-                        .subscribeOn(Schedulers.io())
-                        .map(this::toLoadResult)
-//                        .cache()
-                        .onErrorReturn(LoadResult.Error::new);
-                Log.d("Paging", "Второй запрос page != null = " + page);
-
-            return loadResultSingle;
-
+            return idouApi.getNextArticlesIntObservable(pageSize, page)
+                    .subscribeOn(Schedulers.io())
+                    .map(ArticlesNewsList::getResults)
+                    .map(articleList -> toLoadResult(articleList, page))
+                    .onErrorReturn(LoadResult.Error::new);
         } catch (Exception e) {
             return Single.just(new LoadResult.Error(e));
         }
     }
 
-    private LoadResult<String, Article> toLoadResult(ArticlesNewsList articlesNewsList) {
-        String prevKey = articlesNewsList.getPrevious();
-        String nextKey = articlesNewsList.getNext();
+    private LoadResult<Integer, Article> toLoadResult(List<Article> articles, int page) {
 
-        Log.d("Paging", "toLoadResult nextKey = " + nextKey + ", prevKey = " + prevKey);
-        return new LoadResult.Page<>(articlesNewsList.getResults(), prevKey, nextKey, LoadResult.Page.COUNT_UNDEFINED, LoadResult.Page.COUNT_UNDEFINED);
-    }
-
-    private String getQueryPage(String page) {
-        if (page != null) {
-            Uri uri = Uri.parse(page);
-            return uri.getQueryParameter("offset");
+        Integer nextKey;
+        if (articles.size() < pageSize) {
+            nextKey = null;
+        } else {
+            nextKey = page + pageSize;
         }
-        return null;
+
+        Integer prevKey;
+        if (page == pageSize) {
+            prevKey = null;
+        } else {
+            prevKey = page - pageSize;
+        }
+        Log.d("Paging", "toLoadResult nextKey = " + nextKey + ", prevKey = " + prevKey);
+        return new LoadResult.Page(articles, prevKey, nextKey);
     }
 }

@@ -33,7 +33,6 @@ public class NewsLoadStateAdapter extends LoadStateAdapter<NewsLoadStateAdapter.
             LoadState.Error loadStateError = (LoadState.Error) loadState;
             layoutLoadStateBinding.loadStateErrorMessage.setText(loadStateError.getError().getLocalizedMessage());
         }
-        Log.d("Paging", "LoadState - " + loadState);
 
         layoutLoadStateBinding.loadStateProgress.setVisibility(loadState instanceof LoadState.Loading ? View.VISIBLE : View.GONE);
         layoutLoadStateBinding.loadStateRetry.setVisibility(loadState instanceof LoadState.Error ? View.VISIBLE : View.GONE);
