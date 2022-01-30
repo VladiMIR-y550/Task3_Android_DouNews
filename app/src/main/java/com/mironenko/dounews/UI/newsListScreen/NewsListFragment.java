@@ -1,7 +1,6 @@
 package com.mironenko.dounews.UI.newsListScreen;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.mironenko.dounews.UI.newsListScreen.adapter.ArticleComparator;
 import com.mironenko.dounews.UI.newsListScreen.adapter.NewsLoadStateAdapter;
 import com.mironenko.dounews.UI.newsListScreen.adapter.NewsPagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
-import com.mironenko.dounews.model.Article;
+import com.mironenko.dounews.model.remote.Article;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -49,20 +48,19 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentNewsListBinding.inflate(inflater);
+        binding = FragmentNewsListBinding.inflate(inflater, container, false);
 
         listPresenter.attachView(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-
-        if (savedInstanceState != null) {
-            Parcelable state = savedInstanceState.getParcelable(KEY_SCROLL_STATE);
-            layoutManager.onRestoreInstanceState(state);
-        }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+//        if (savedInstanceState != null) {
+//            Parcelable state = savedInstanceState.getParcelable(KEY_SCROLL_STATE);
+//            layoutManager.onRestoreInstanceState(state);
+//        }
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
 
-        pagingAdapter = new NewsPagingAdapter(new ArticleComparator());
+        pagingAdapter = new NewsPagingAdapter(new ArticleComparator(), requireContext());
         pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         binding.recyclerView.setAdapter(pagingAdapter.withLoadStateHeaderAndFooter(new NewsLoadStateAdapter(this),
                 new NewsLoadStateAdapter(this)));
@@ -125,7 +123,7 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_SCROLL_STATE, binding.recyclerView.getLayoutManager().onSaveInstanceState());
+//        outState.putParcelable(KEY_SCROLL_STATE, binding.recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override

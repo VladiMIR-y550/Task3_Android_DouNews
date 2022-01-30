@@ -6,7 +6,7 @@ import androidx.paging.PagingData;
 import androidx.paging.rxjava3.PagingRx;
 
 import com.mironenko.dounews.UI.mvpBase.BasePresenter;
-import com.mironenko.dounews.model.Article;
+import com.mironenko.dounews.model.remote.Article;
 import com.mironenko.dounews.repositories.NewsPageSource;
 
 import io.reactivex.rxjava3.core.Flowable;

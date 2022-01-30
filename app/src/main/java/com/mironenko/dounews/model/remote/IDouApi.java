@@ -1,4 +1,4 @@
-package com.mironenko.dounews.model;
+package com.mironenko.dounews.model.remote;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;

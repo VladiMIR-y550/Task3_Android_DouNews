@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.mironenko.dounews.model.Article;
+import com.mironenko.dounews.model.remote.Article;
 
 public class ArticleComparator extends DiffUtil.ItemCallback<Article> {
     @Override

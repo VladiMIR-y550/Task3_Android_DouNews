@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.mironenko.dounews.InternetConnection;
@@ -29,7 +30,8 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentDetailedNewsBinding.inflate(inflater);
+        binding = FragmentDetailedNewsBinding.inflate(inflater, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
         detailedPresenter.attachView(this);
 

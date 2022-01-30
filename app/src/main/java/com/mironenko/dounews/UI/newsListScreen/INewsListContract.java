@@ -2,7 +2,7 @@ package com.mironenko.dounews.UI.newsListScreen;
 
 import androidx.paging.PagingData;
 
-import com.mironenko.dounews.model.Article;
+import com.mironenko.dounews.model.remote.Article;
 import com.mironenko.dounews.UI.mvpBase.IMvpBasePresenter;
 import com.mironenko.dounews.UI.mvpBase.IMvpBaseView;
 

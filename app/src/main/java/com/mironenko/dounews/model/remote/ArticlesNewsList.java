@@ -1,4 +1,4 @@
-package com.mironenko.dounews.model;
+package com.mironenko.dounews.model.remote;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

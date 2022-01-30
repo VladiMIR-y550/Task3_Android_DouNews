@@ -9,8 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.paging.PagingState;
 import androidx.paging.rxjava3.RxPagingSource;
 
-import com.mironenko.dounews.model.Article;
-import com.mironenko.dounews.model.ArticlesNewsList;
+import com.mironenko.dounews.model.local.NewsDB;
+import com.mironenko.dounews.model.remote.Article;
+import com.mironenko.dounews.model.remote.ArticlesNewsList;
 
 import java.util.List;
 
@@ -19,8 +20,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NewsPageSource extends RxPagingSource<Integer, Article> {
 
+    private NewsDB dataBase = NewsDB.getInstance();
     private int pageSize;
-    private int page;
+//    private int page;
 
     @Nullable
     @Override
@@ -57,7 +59,7 @@ public class NewsPageSource extends RxPagingSource<Integer, Article> {
     public Single<LoadResult<Integer, Article>> loadSingle(@NonNull LoadParams<Integer> loadParams) {
         try {
             pageSize = loadParams.getLoadSize();
-            page = loadParams.getKey() != null ? loadParams.getKey() : pageSize;
+            Integer page = loadParams.getKey() != null ? loadParams.getKey() : pageSize;
 
             return idouApi.getNextArticlesIntObservable(pageSize, page)
                     .subscribeOn(Schedulers.io())
@@ -70,7 +72,7 @@ public class NewsPageSource extends RxPagingSource<Integer, Article> {
     }
 
     private LoadResult<Integer, Article> toLoadResult(List<Article> articles, int page) {
-
+//        dataBase.saveArticlesFromList(articles);
         Integer nextKey;
         if (articles.size() < pageSize) {
             nextKey = null;

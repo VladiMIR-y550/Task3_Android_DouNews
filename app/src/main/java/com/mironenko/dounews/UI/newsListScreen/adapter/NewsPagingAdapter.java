@@ -1,6 +1,7 @@
 package com.mironenko.dounews.UI.newsListScreen.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.widget.TextViewCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.databinding.LayoutArticleCardBinding;
-import com.mironenko.dounews.model.Article;
-import com.squareup.picasso.Picasso;
+import com.mironenko.dounews.model.remote.Article;
 
 public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdapter.NewsViewHolder> {
 
@@ -25,11 +25,12 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
         void onArticleSelected(String urlArticle);
     }
 
-    private LayoutArticleCardBinding bindingCard;
     private OnItemClickedListener listener;
+    private Context context;
 
-    public NewsPagingAdapter(@NonNull DiffUtil.ItemCallback<Article> diffCallback) {
+    public NewsPagingAdapter(@NonNull DiffUtil.ItemCallback<Article> diffCallback, Context context) {
         super(diffCallback);
+        this.context = context;
     }
 
     public void setListener(OnItemClickedListener l) {
@@ -40,8 +41,8 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        bindingCard = LayoutArticleCardBinding.inflate(inflater);
-        return new NewsViewHolder(bindingCard.getRoot());
+        LayoutArticleCardBinding bindingCard = LayoutArticleCardBinding.inflate(inflater, parent, false);
+        return new NewsViewHolder(bindingCard);
     }
 
     @Override
@@ -53,37 +54,26 @@ public class NewsPagingAdapter extends PagingDataAdapter<Article, NewsPagingAdap
 
     class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private final TextView articleTitle;
-        private final TextView articleAuthorName;
-        private final TextView articlePostViews;
-        private final TextView articleTag;
-        private final ImageView articleImageTitle;
+        private final LayoutArticleCardBinding itemBinding;
         private String urlArticle;
 
-        public NewsViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            articleTitle = bindingCard.tvTitle;
-            articleAuthorName = bindingCard.tvAuthorName;
-            articlePostViews = bindingCard.tvPageViews;
-            articleTag = bindingCard.tvTags;
-            articleImageTitle = bindingCard.ivTitle;
+        public NewsViewHolder(@NonNull LayoutArticleCardBinding cardBinding) {
+            super(cardBinding.getRoot());
+            this.itemBinding = cardBinding;
 
             itemView.setOnClickListener(this);
         }
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint({"SetTextI18n", "CheckResult"})
         public void bind(Article item) {
-            articleTitle.setText(item.getTitle().trim());
-            articleAuthorName.setText("Автор: " + item.getAuthorName());
-            articlePostViews.setText("Просмотров: " + item.getPageviews());
-            articleTag.setText("Теги: " + item.getTags());
-
-            if (item.getImgBig2x() == null || item.getImgBig2x().equals("")) {
-                Picasso.get().load(R.mipmap.ic_launcher).into(articleImageTitle);
-            } else {
-                Picasso.get().load(item.getImgBig2x()).into(articleImageTitle);
-            }
+            itemBinding.tvTitle.setText(item.getTitle().trim());
+            itemBinding.tvName.setText(item.getAuthorName());
+            itemBinding.tvCount.setText(String.valueOf(item.getPageviews()));
+            itemBinding.tvTags.setText(item.getTags());
+            Glide.with(context)
+                    .load(item.getImgBig2x())
+                    .optionalFitCenter()
+                    .into(itemBinding.ivTitle);
             urlArticle = item.getUrl();
         }
 

@@ -15,5 +15,8 @@
     <string name="error_message">Error message</string>
     <string name="retry">Retry</string>
     <string name="news_image">News image</string>
+    <string name="count">count</string>
+    <string name="name">name</string>
+    <string name="author">Author</string>
 
 </resources>
