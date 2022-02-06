@@ -23,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showList() {
-        NewsListFragment listFragment = NewsListFragment.newInstance();
+        NewsListFragment newsListFragment = NewsListFragment.newInstance();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, listFragment)
+                .add(R.id.fragment_container, newsListFragment)
                 .commit();
     }
 

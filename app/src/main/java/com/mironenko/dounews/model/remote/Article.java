@@ -3,6 +3,8 @@ package com.mironenko.dounews.model.remote;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class Article {
     @SerializedName("id")
     @Expose
@@ -180,5 +182,4 @@ public class Article {
     public void setPublished(String published) {
         this.published = published;
     }
-
 }

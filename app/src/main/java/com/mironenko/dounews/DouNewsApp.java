@@ -7,7 +7,7 @@ import com.mironenko.dounews.model.remote.IDouApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DouNewsApp extends Application {
@@ -33,10 +33,9 @@ public class DouNewsApp extends Application {
                 .baseUrl(ROOT_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         idouApi = retrofit.create(IDouApi.class);
     }
-
 }
