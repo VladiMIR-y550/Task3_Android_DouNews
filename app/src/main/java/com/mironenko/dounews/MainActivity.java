@@ -7,8 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.mironenko.dounews.UI.newsListScreen.NewsListFragment;
 import com.mironenko.dounews.databinding.ActivityMainBinding;
 
+import io.realm.Realm;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Realm realm;
     private ActivityMainBinding binding;
 
     @Override
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        Realm.init(this);
         if (savedInstanceState == null) {
             showList();
         }

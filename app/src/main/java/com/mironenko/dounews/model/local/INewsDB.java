@@ -1,7 +1,7 @@
 package com.mironenko.dounews.model.local;
 
-import com.mironenko.dounews.model.remote.Article;
-import com.mironenko.dounews.model.remote.ArticlesNewsList;
+import com.mironenko.dounews.model.api.Article;
+import com.mironenko.dounews.model.api.ArticlesNewsList;
 
 import java.util.List;
 

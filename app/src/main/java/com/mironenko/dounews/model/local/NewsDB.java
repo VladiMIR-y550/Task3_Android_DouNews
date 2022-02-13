@@ -1,13 +1,13 @@
 package com.mironenko.dounews.model.local;
 
-import com.mironenko.dounews.model.remote.Article;
-import com.mironenko.dounews.model.remote.ArticlesNewsList;
+import com.mironenko.dounews.model.api.Article;
+import com.mironenko.dounews.model.api.ArticlesNewsList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NewsDB implements INewsDB{
+public class NewsDB  implements INewsDB {
     private static NewsDB instance;
 
     private final List<Article> newsBase;

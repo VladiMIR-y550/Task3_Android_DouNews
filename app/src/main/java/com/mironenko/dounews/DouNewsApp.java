@@ -2,8 +2,8 @@ package com.mironenko.dounews;
 
 import android.app.Application;
 
-import com.mironenko.dounews.model.remote.IDouApi;
-
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -19,7 +19,18 @@ public class DouNewsApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        configureRealm();
+
         configureRetrofit();
+    }
+
+    private void configureRealm() {
+        Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name("newsDB.realm")
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(configuration);
     }
 
     private void configureRetrofit() {

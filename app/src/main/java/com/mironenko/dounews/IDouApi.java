@@ -1,4 +1,6 @@
-package com.mironenko.dounews.model.remote;
+package com.mironenko.dounews;
+
+import com.mironenko.dounews.model.api.ArticlesNewsList;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;

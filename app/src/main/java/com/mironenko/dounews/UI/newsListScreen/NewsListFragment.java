@@ -1,7 +1,7 @@
 package com.mironenko.dounews.UI.newsListScreen;
 
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mironenko.dounews.InternetConnection;
@@ -18,21 +19,27 @@ import com.mironenko.dounews.R;
 import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
 import com.mironenko.dounews.UI.newsListScreen.adapter.PagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
-import com.mironenko.dounews.model.remote.ArticlesNewsList;
+import com.mironenko.dounews.model.api.Article;
+import com.mironenko.dounews.model.api.ArticlesNewsList;
 
+import java.util.List;
+
+import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
 
 public class NewsListFragment extends Fragment implements INewsListContract.IView,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PagingAdapter.PagingUpdateListener {
 
     private static final String KEY_SCROLL_STATE = "Key scroll view";
     private final String KEY_URL_NEWS = "Url news";
     private FragmentNewsListBinding binding;
-    private final INewsListContract.IPresenter listPresenter = new NewsListPresenter();
+    private final INewsListContract.IPresenter listPresenter = NewsListPresenter.getInstance();
     private PagingAdapter pagingAdapter;
+    private LinearLayoutManager layoutManager;
 
     public static NewsListFragment newInstance() {
         Bundle args = new Bundle();
@@ -41,28 +48,82 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("RxLifeCycle", "onCreate " + savedInstanceState);
+        super.onCreate(savedInstanceState);
+
+        pagingAdapter = new PagingAdapter(this);
+        pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("RxLifeCycle", "onCreateView");
         binding = FragmentNewsListBinding.inflate(inflater, container, false);
 
         listPresenter.attachView(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        layoutManager = new LinearLayoutManager(requireContext());
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
-
-        pagingAdapter = new PagingAdapter();
-        pagingAdapter.setPresenter(listPresenter);
         binding.recyclerView.setAdapter(pagingAdapter);
         if (savedInstanceState == null) {
             if (InternetConnection.checkConnection(requireContext())) {
-                listPresenter.downloadNewsList(listPresenter.getPageNum());
+                listPresenter.downloadNewsList();
             }
         } else {
-            Parcelable state = savedInstanceState.getParcelable(KEY_SCROLL_STATE);
-            layoutManager.onRestoreInstanceState(state);
+            listPresenter.getAllDataList()
+                    .subscribe(new Observer<List<Article>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            showLoading(true);
+                        }
+
+                        @Override
+                        public void onNext(List<Article> articleList) {
+                            showLoading(false);
+                            Log.d("Rx", "onNext = " + articleList.size());
+                            pagingAdapter.setData(articleList);
+                            pagingAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("Rx", "Error");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            showLoading(false);
+                            Log.d("Rx", "onComplete");
+                        }
+                    });
+//            listPresenter.getAll()
+//                    .subscribe(new Observer<List<Article>>() {
+//                        @Override
+//                        public void onSubscribe(Disposable d) {
+//                        }
+//
+//                        @Override
+//                        public void onNext(List<Article> articleList) {
+//                            Log.d("Rx", "onNext = " + articleList.size());
+//                            pagingAdapter.setData(articleList);
+//                            pagingAdapter.notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            Log.d("Rx", "Error");
+//                        }
+//
+//                        @Override
+//                        public void onComplete() {
+//                            Log.d("Rx", "onComplete");
+//                        }
+//                    });
         }
 
         binding.swipeRefresh.setOnRefreshListener(this);
@@ -90,24 +151,45 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         dataSource.subscribe(new SingleObserver<ArticlesNewsList>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showLoading(false);
             }
 
             @Override
             public void onSuccess(ArticlesNewsList articlesNewsList) {
+                showLoading(false);
+                pagingAdapter.setData(articlesNewsList.getResults());
                 pagingAdapter.notifyDataSetChanged();
+                Log.d("RxNotify", "NotifyDataSetChanged = " + articlesNewsList.getResults().size());
                 showLoading(false);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                showLoading(true);
             }
         });
     }
 
     @Override
-    public void onArticleSelected(String urlArticle) {
+    public void onRefresh() {
+        //TODO сделать загрузку 0-й страницы и добавление Item-ов в начало или удаление старых спискови замены их на новые
+        listPresenter.downloadNewsList();
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        listPresenter.detachView();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onUpdate() {
+        listPresenter.downloadNewsList();
+    }
+
+    @Override
+    public void onItemClickListener(String urlArticle) {
         NewsDetailedFragment detailedFragment = NewsDetailedFragment.newInstance();
         Bundle args = new Bundle();
         args.putString(KEY_URL_NEWS, urlArticle);
@@ -118,26 +200,5 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, detailedFragment)
                 .commit();
-    }
-
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_SCROLL_STATE, binding.recyclerView.getLayoutManager().onSaveInstanceState());
-    }
-
-    @Override
-    public void onRefresh() {
-        listPresenter.downloadNewsList(listPresenter.getPageNum());
-    }
-
-    @Override
-    public void onDestroyView() {
-        binding = null;
-        listPresenter.detachView();
-        pagingAdapter.setPresenter(null);
-        pagingAdapter = null;
-        super.onDestroyView();
     }
 }

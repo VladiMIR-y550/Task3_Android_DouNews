@@ -14,11 +14,14 @@ import androidx.fragment.app.Fragment;
 import com.mironenko.dounews.InternetConnection;
 import com.mironenko.dounews.databinding.FragmentDetailedNewsBinding;
 
+import java.util.Objects;
+
 public class NewsDetailedFragment extends Fragment implements INewsDetailedContract.IView {
     private final String KEY_URL_NEWS = "Url news";
+    private final String KEY_POSITION = "Scrolled position";
 
     private FragmentDetailedNewsBinding binding;
-    private final INewsDetailedContract.IPresenter detailedPresenter = new NewsDetailedPresenter();
+    private final INewsDetailedContract.IPresenter detailedPresenter = NewsDetailedPresenter.getInstance();
 
     public static NewsDetailedFragment newInstance() {
         Bundle args = new Bundle();
@@ -31,7 +34,9 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDetailedNewsBinding.inflate(inflater, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        binding.webViewDetailed.getSettings().setBuiltInZoomControls(true);
+
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
 
         detailedPresenter.attachView(this);
 
@@ -43,7 +48,6 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
         if (InternetConnection.checkConnection(requireContext())) {
             detailedPresenter.downloadNewsDetailed();
         }
-
         return binding.getRoot();
     }
 
@@ -71,5 +75,20 @@ public class NewsDetailedFragment extends Fragment implements INewsDetailedContr
     @Override
     public void showError() {
         Toast.makeText(getContext(), "Something went wrong...", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            binding.webViewDetailed.scrollTo(0, savedInstanceState.getInt(KEY_POSITION));
+        }
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int scrolledPosition = binding.webViewDetailed.getScrollY();
+        outState.putInt(KEY_POSITION, scrolledPosition);
     }
 }
