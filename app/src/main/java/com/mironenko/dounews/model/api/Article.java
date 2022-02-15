@@ -3,15 +3,11 @@ package com.mironenko.dounews.model.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-<<<<<<< HEAD:app/src/main/java/com/mironenko/dounews/model/api/Article.java
-public class Article {
-=======
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Article extends RealmObject {
     @PrimaryKey
->>>>>>> developer-rxJava:app/src/main/java/com/mironenko/dounews/model/remote/Article.java
     @SerializedName("id")
     @Expose
     private Integer id;

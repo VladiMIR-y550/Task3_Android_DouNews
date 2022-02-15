@@ -7,18 +7,8 @@ import com.mironenko.dounews.DouNewsApp;
 import com.mironenko.dounews.UI.mvpBase.BasePresenter;
 import com.mironenko.dounews.model.api.Article;
 import com.mironenko.dounews.model.api.ArticlesNewsList;
-<<<<<<< HEAD
-import com.mironenko.dounews.model.local.INewsDB;
-import com.mironenko.dounews.model.local.NewsDB;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-=======
 import java.util.List;
 
->>>>>>> developer-rxJava
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -31,12 +21,6 @@ import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
 public class NewsListPresenter extends BasePresenter<Article, INewsListContract.IView> implements INewsListContract.IPresenter {
     private final int PAGE_SIZE = 20;
-<<<<<<< HEAD
-    private INewsDB baseNews = NewsDB.getInstance();
-    private List<Article> data = new ArrayList<>();
-    private Observable<List<Article>> articleSource;
-=======
->>>>>>> developer-rxJava
     private static NewsListPresenter presenter;
 
     public static synchronized NewsListPresenter getInstance() {
@@ -44,8 +28,6 @@ public class NewsListPresenter extends BasePresenter<Article, INewsListContract.
             presenter = new NewsListPresenter();
         }
         return presenter;
-<<<<<<< HEAD
-=======
     }
 
     @Override
@@ -78,20 +60,15 @@ public class NewsListPresenter extends BasePresenter<Article, INewsListContract.
                     }
                 });
     }
-@Override
+    @Override
     public Observable<List<Article>> getAllBase(Class<Article> clazz) {
         Realm realm = Realm.getDefaultInstance();
         return Observable.just(clazz)
                 .map(type -> realm.where(type).findAll());
->>>>>>> developer-rxJava
     }
 
     @SuppressLint("CheckResult")
     @Override
-<<<<<<< HEAD
-    public void downloadNewsList() {
-        view.subscribeNews(dataSource(data.size()));
-=======
     public void refreshNews() {
         downloadPagesArticle(0)
                 .subscribe(new Consumer<ArticlesNewsList>() {
@@ -102,30 +79,18 @@ public class NewsListPresenter extends BasePresenter<Article, INewsListContract.
                 });
         view.showLoading(false);
 
->>>>>>> developer-rxJava
     }
 
     private Single<ArticlesNewsList> downloadPagesArticle(int page) {
         return DouNewsApp.idouApi.getNextArticlesIntObservable(PAGE_SIZE, page)
                 .subscribeOn(Schedulers.io())
-<<<<<<< HEAD
-                .map(this::getSaveListIntoDatabase)
-                .doOnSuccess(articlesNewsList -> {
-                    data.addAll(articlesNewsList.getResults());
-=======
                 .doOnError(e -> {
                     view.showError();
                     Log.d("NewsListPresenter", "DataSource error " + e);
->>>>>>> developer-rxJava
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-<<<<<<< HEAD
-    private ArticlesNewsList getSaveListIntoDatabase(ArticlesNewsList articlesNewsList) {
-        baseNews.saveArticlesFromResponseBody(articlesNewsList);
-        return articlesNewsList;
-=======
     private void saveInDB(List<Article> articles) {
         Realm realm = Realm.getDefaultInstance();
         for (Article article : articles) {
@@ -139,22 +104,5 @@ public class NewsListPresenter extends BasePresenter<Article, INewsListContract.
                 realm.cancelTransaction();
             }
         }
->>>>>>> developer-rxJava
-    }
-
-    public Observable<List<Article>> getAllDataList() {
-        articleSource = Observable.fromCallable(new Callable<List<Article>>() {
-            @Override
-            public List<Article> call() throws Exception {
-                return checkThread(data);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        return articleSource;
-    }
-
-    private List<Article> checkThread(List<Article> list) {
-        Log.d("RxThread", "" + Thread.currentThread().getName());
-        return list;
     }
 }

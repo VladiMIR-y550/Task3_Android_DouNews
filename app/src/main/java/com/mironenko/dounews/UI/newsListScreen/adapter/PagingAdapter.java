@@ -19,14 +19,6 @@ import java.util.List;
 public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHolder> {
 
     private final int PRELOAD = 5;
-<<<<<<< HEAD
-    private List<Article> articleList = new ArrayList<>();
-    private PagingUpdateListener listener;
-
-    public interface PagingUpdateListener {
-        void onUpdate();
-        void onItemClickListener(String urlArticle);
-=======
     private PagingUpdateListener listener;
     private List<Article> articleList = new ArrayList<>();
 
@@ -43,12 +35,8 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
     public void setArticleList(List<Article> articleList) {
         this.articleList.clear();
         this.articleList = articleList;
->>>>>>> developer-rxJava
     }
 
-    public PagingAdapter(PagingUpdateListener listener) {
-        this.listener = listener;
-    }
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,14 +47,8 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-<<<<<<< HEAD
-       holder.bindItem(articleList.get(position));
-
-       Log.d("RxPagingAdapter", "onBindViewHolder = " + position);
-=======
         holder.bindItem(articleList.get(position));
         Log.d("PagingAdapter", "onBindViewHolder = " + position);
->>>>>>> developer-rxJava
         if (position == articleList.size() - PRELOAD) {
             listener.onUpdate();
         }
@@ -75,16 +57,6 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
     @Override
     public int getItemCount() {
         return articleList.size();
-<<<<<<< HEAD
-    }
-
-    public void setData(List<Article> articles) {
-        Log.d("RxPagingAdapter", "setData articles = " + articles.size());
-        articleList.addAll(articles);
-        Log.d("RxPagingAdapter", "articlesList = " + articleList.size());
-
-=======
->>>>>>> developer-rxJava
     }
 
     class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -116,11 +88,7 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
 
         @Override
         public void onClick(View v) {
-<<<<<<< HEAD
-            if(listener != null && urlArticle != null) {
-=======
             if (listener != null && urlArticle != null) {
->>>>>>> developer-rxJava
                 listener.onItemClickListener(urlArticle);
             }
         }

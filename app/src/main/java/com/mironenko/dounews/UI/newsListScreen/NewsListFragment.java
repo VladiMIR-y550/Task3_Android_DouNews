@@ -19,19 +19,10 @@ import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
 import com.mironenko.dounews.UI.newsListScreen.adapter.PagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
 import com.mironenko.dounews.model.api.Article;
-<<<<<<< HEAD
-import com.mironenko.dounews.model.api.ArticlesNewsList;
-=======
->>>>>>> developer-rxJava
 
 import java.util.List;
 
 import io.reactivex.Observer;
-<<<<<<< HEAD
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-=======
->>>>>>> developer-rxJava
 import io.reactivex.disposables.Disposable;
 
 
@@ -57,10 +48,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d("RxLifeCycle", "onCreate " + savedInstanceState);
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-
-        pagingAdapter = new PagingAdapter(this);
-=======
         pagingAdapter = new PagingAdapter(this);
 
         if (savedInstanceState == null) {
@@ -91,7 +78,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
                     }
                 });
 
->>>>>>> developer-rxJava
         pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 
     }
@@ -108,65 +94,7 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(pagingAdapter);
-<<<<<<< HEAD
-        if (savedInstanceState == null) {
-            if (InternetConnection.checkConnection(requireContext())) {
-                listPresenter.downloadNewsList();
-            }
-        } else {
-            listPresenter.getAllDataList()
-                    .subscribe(new Observer<List<Article>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            showLoading(true);
-                        }
 
-                        @Override
-                        public void onNext(List<Article> articleList) {
-                            showLoading(false);
-                            Log.d("Rx", "onNext = " + articleList.size());
-                            pagingAdapter.setData(articleList);
-                            pagingAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("Rx", "Error");
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            showLoading(false);
-                            Log.d("Rx", "onComplete");
-                        }
-                    });
-//            listPresenter.getAll()
-//                    .subscribe(new Observer<List<Article>>() {
-//                        @Override
-//                        public void onSubscribe(Disposable d) {
-//                        }
-//
-//                        @Override
-//                        public void onNext(List<Article> articleList) {
-//                            Log.d("Rx", "onNext = " + articleList.size());
-//                            pagingAdapter.setData(articleList);
-//                            pagingAdapter.notifyDataSetChanged();
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            Log.d("Rx", "Error");
-//                        }
-//
-//                        @Override
-//                        public void onComplete() {
-//                            Log.d("Rx", "onComplete");
-//                        }
-//                    });
-        }
-=======
-
->>>>>>> developer-rxJava
 
         binding.swipeRefresh.setOnRefreshListener(this);
         return binding.getRoot();
@@ -189,50 +117,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
-<<<<<<< HEAD
-    public void subscribeNews(Single<ArticlesNewsList> dataSource) {
-        dataSource.subscribe(new SingleObserver<ArticlesNewsList>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                showLoading(false);
-            }
-
-            @Override
-            public void onSuccess(ArticlesNewsList articlesNewsList) {
-                showLoading(false);
-                pagingAdapter.setData(articlesNewsList.getResults());
-                pagingAdapter.notifyDataSetChanged();
-                Log.d("RxNotify", "NotifyDataSetChanged = " + articlesNewsList.getResults().size());
-                showLoading(false);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                showLoading(true);
-            }
-        });
-    }
-
-    @Override
-    public void onRefresh() {
-        //TODO сделать загрузку 0-й страницы и добавление Item-ов в начало или удаление старых спискови замены их на новые
-        listPresenter.downloadNewsList();
-    }
-
-    @Override
-    public void onDestroyView() {
-        binding = null;
-        listPresenter.detachView();
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onUpdate() {
-        listPresenter.downloadNewsList();
-    }
-
-    @Override
-=======
     public void updateAdapter() {
         pagingAdapter.notifyDataSetChanged();
     }
@@ -255,7 +139,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
->>>>>>> developer-rxJava
     public void onItemClickListener(String urlArticle) {
         NewsDetailedFragment detailedFragment = NewsDetailedFragment.newInstance();
         Bundle args = new Bundle();
