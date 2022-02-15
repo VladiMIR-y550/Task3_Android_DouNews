@@ -14,19 +14,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.mironenko.dounews.InternetConnection;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
 import com.mironenko.dounews.UI.newsListScreen.adapter.PagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
 import com.mironenko.dounews.model.api.Article;
+<<<<<<< HEAD
 import com.mironenko.dounews.model.api.ArticlesNewsList;
+=======
+>>>>>>> developer-rxJava
 
 import java.util.List;
 
 import io.reactivex.Observer;
+<<<<<<< HEAD
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
+=======
+>>>>>>> developer-rxJava
 import io.reactivex.disposables.Disposable;
 
 
@@ -52,8 +57,41 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d("RxLifeCycle", "onCreate " + savedInstanceState);
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
 
         pagingAdapter = new PagingAdapter(this);
+=======
+        pagingAdapter = new PagingAdapter(this);
+
+        if (savedInstanceState == null) {
+            if (listPresenter.getNews() == 0) {
+                listPresenter.downloadArticles();
+            }
+        }
+        listPresenter.getAllBase(Article.class)
+                .subscribe(new Observer<List<Article>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Article> articleList) {
+                        pagingAdapter.setArticleList(articleList);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+>>>>>>> developer-rxJava
         pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 
     }
@@ -70,6 +108,7 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(pagingAdapter);
+<<<<<<< HEAD
         if (savedInstanceState == null) {
             if (InternetConnection.checkConnection(requireContext())) {
                 listPresenter.downloadNewsList();
@@ -125,6 +164,9 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
 //                        }
 //                    });
         }
+=======
+
+>>>>>>> developer-rxJava
 
         binding.swipeRefresh.setOnRefreshListener(this);
         return binding.getRoot();
@@ -147,6 +189,7 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
+<<<<<<< HEAD
     public void subscribeNews(Single<ArticlesNewsList> dataSource) {
         dataSource.subscribe(new SingleObserver<ArticlesNewsList>() {
             @Override
@@ -189,6 +232,30 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
+=======
+    public void updateAdapter() {
+        pagingAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefresh() {
+        listPresenter.refreshNews();
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        listPresenter.detachView();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onUpdate() {
+        listPresenter.downloadArticles();
+    }
+
+    @Override
+>>>>>>> developer-rxJava
     public void onItemClickListener(String urlArticle) {
         NewsDetailedFragment detailedFragment = NewsDetailedFragment.newInstance();
         Bundle args = new Bundle();
