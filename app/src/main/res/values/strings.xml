@@ -18,5 +18,6 @@
     <string name="count">count</string>
     <string name="name">name</string>
     <string name="author">Author</string>
+    <string name="date">Date</string>
 
 </resources>

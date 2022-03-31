@@ -1,5 +1,6 @@
 package com.mironenko.dounews.UI.newsDetailedScreen;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,23 +12,32 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.mironenko.dounews.DouNewsApp;
 import com.mironenko.dounews.InternetConnection;
 import com.mironenko.dounews.databinding.FragmentDetailedNewsBinding;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 public class NewsDetailedFragment extends Fragment implements INewsDetailedContract.IView {
+    @Inject
+    INewsDetailedContract.IPresenter detailedPresenter;
     private final String KEY_URL_NEWS = "Url news";
     private final String KEY_POSITION = "Scrolled position";
-
     private FragmentDetailedNewsBinding binding;
-    private final INewsDetailedContract.IPresenter detailedPresenter = NewsDetailedPresenter.getInstance();
 
     public static NewsDetailedFragment newInstance() {
         Bundle args = new Bundle();
         NewsDetailedFragment fragment = new NewsDetailedFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        DouNewsApp.get().getFragmentComponent().injectNewsDetailedFragment(this);
+        super.onAttach(context);
     }
 
     @Nullable

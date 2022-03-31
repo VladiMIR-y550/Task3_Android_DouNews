@@ -1,61 +1,28 @@
-package com.mironenko.dounews.model.api;
+package com.mironenko.dounews.model.local;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Article extends RealmObject {
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private Integer id;
-    @SerializedName("title")
-    @Expose
     private String title;
-    @SerializedName("url")
-    @Expose
     private String url;
-    @SerializedName("category")
-    @Expose
     private String category;
-    @SerializedName("category_url")
-    @Expose
     private String categoryUrl;
-    @SerializedName("announcement")
-    @Expose
     private String announcement;
-    @SerializedName("tags")
-    @Expose
     private String tags;
-    @SerializedName("pageviews")
-    @Expose
     private Integer pageviews;
-    @SerializedName("comments_count")
-    @Expose
     private Integer commentsCount;
-    @SerializedName("img_big")
-    @Expose
     private String imgBig;
-    @SerializedName("img_big_2x")
-    @Expose
     private String imgBig2x;
-    @SerializedName("img_small")
-    @Expose
     private String imgSmall;
-    @SerializedName("img_small_2x")
-    @Expose
     private String imgSmall2x;
-    @SerializedName("author_name")
-    @Expose
     private String authorName;
-    @SerializedName("author_url")
-    @Expose
     private String authorUrl;
-    @SerializedName("published")
-    @Expose
-    private String published;
+    private Date published;
 
     public Integer getId() {
         return id;
@@ -177,11 +144,11 @@ public class Article extends RealmObject {
         this.authorUrl = authorUrl;
     }
 
-    public String getPublished() {
+    public Date getPublished() {
         return published;
     }
 
-    public void setPublished(String published) {
+    public void setPublished(Date published) {
         this.published = published;
     }
 }

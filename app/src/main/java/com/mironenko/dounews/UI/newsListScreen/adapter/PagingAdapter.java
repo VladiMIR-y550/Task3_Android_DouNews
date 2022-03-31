@@ -11,24 +11,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.mironenko.dounews.databinding.LayoutArticleCardBinding;
-import com.mironenko.dounews.model.api.Article;
+import com.mironenko.dounews.model.local.Article;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHolder> {
 
+    public interface PagingUpdateListener {
+        void onUpdate();
+        void onItemClickListener(String urlArticle);
+    }
+
     private final int PRELOAD = 5;
     private PagingUpdateListener listener;
     private List<Article> articleList = new ArrayList<>();
 
-    public interface PagingUpdateListener {
-        void onUpdate();
-
-        void onItemClickListener(String urlArticle);
+    public PagingAdapter() {
     }
 
-    public PagingAdapter(PagingUpdateListener listener) {
+    public void setListener(PagingUpdateListener listener) {
         this.listener = listener;
     }
 
@@ -79,6 +81,7 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
                 itemBinding.tvName.setText(item.getAuthorName());
                 itemBinding.tvCount.setText(String.valueOf(item.getPageviews()));
                 itemBinding.tvTags.setText(item.getTags());
+//                itemBinding.tvDate.setText(item.getPublished().toString());
                 Glide.with(context)
                         .load(item.getImgBig2x())
                         .into(itemBinding.ivTitle);

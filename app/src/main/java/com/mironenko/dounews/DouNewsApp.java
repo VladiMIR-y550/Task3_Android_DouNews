@@ -2,51 +2,59 @@ package com.mironenko.dounews;
 
 import android.app.Application;
 
+import com.mironenko.dounews.model.di.component.AppComponent;
+import com.mironenko.dounews.model.di.component.DaggerAppComponent;
+import com.mironenko.dounews.model.di.component.DataComponent;
+import com.mironenko.dounews.model.di.component.FragmentComponent;
+import com.mironenko.dounews.model.di.module.AppModule;
+import com.mironenko.dounews.model.di.module.NetworkModule;
+
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DouNewsApp extends Application {
 
     private static final String ROOT_URL = "https://api.dou.ua/";
-    public static IDouApi idouApi;
+    private final int PAGE_SIZE = 20;
+    private AppComponent appComponent;
+    private DataComponent dataComponent;
+    private FragmentComponent fragmentComponent;
+
+    protected static DouNewsApp instance;
+
+    public static DouNewsApp get() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        configureRealm();
+        instance = this;
 
-        configureRetrofit();
+        Realm.init(instance);
+
+        appComponent = DaggerAppComponent.builder()
+                .application(this)
+                .appModule(new AppModule(getApplicationContext()))
+                .networkModule(new NetworkModule(ROOT_URL))
+                .build();
+        dataComponent = appComponent.dataComponent().build();
+        fragmentComponent = appComponent.listFragmentComponent().build();
     }
 
-    private void configureRealm() {
-        Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .name("newsDB.realm")
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(configuration);
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
-    private void configureRetrofit() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+    public DataComponent getDataComponent() {
+        return dataComponent;
+    }
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ROOT_URL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public FragmentComponent getFragmentComponent() {
+        return fragmentComponent;
+    }
 
-        idouApi = retrofit.create(IDouApi.class);
+    public void clearFragmentComponent() {
+        fragmentComponent = null;
     }
 }

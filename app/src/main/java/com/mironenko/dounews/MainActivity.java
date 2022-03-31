@@ -11,16 +11,20 @@ import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Realm realm;
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        DouNewsApplicationComponent douNewsApplicationComponent = DaggerDouNewsApplicationComponent.builder()
+//                .contextModule(new ContextModule(this))
+//                .build();
+//        douNewsApplicationComponent.inject(this);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Realm.init(this);
         if (savedInstanceState == null) {
             showList();
         }

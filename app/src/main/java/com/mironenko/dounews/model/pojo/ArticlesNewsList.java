@@ -1,4 +1,4 @@
-package com.mironenko.dounews.model.api;
+package com.mironenko.dounews.model.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +18,7 @@ public class ArticlesNewsList {
     private String previous;
     @SerializedName("results")
     @Expose
-    private List<Article> results = new ArrayList<>();
+    private List<ArticleObj> results = new ArrayList<>();
 
     public Integer getCount() {
         return count;
@@ -44,11 +44,11 @@ public class ArticlesNewsList {
         this.previous = previous;
     }
 
-    public List<Article> getResults() {
+    public List<ArticleObj> getResults() {
         return results;
     }
 
-    public void setResults(List<Article> results) {
+    public void setResults(List<ArticleObj> results) {
         this.results = results;
     }
 }

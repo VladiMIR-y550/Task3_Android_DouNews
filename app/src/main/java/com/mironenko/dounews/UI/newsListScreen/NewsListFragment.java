@@ -1,7 +1,7 @@
 package com.mironenko.dounews.UI.newsListScreen;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.mironenko.dounews.DouNewsApp;
 import com.mironenko.dounews.R;
 import com.mironenko.dounews.UI.newsDetailedScreen.NewsDetailedFragment;
 import com.mironenko.dounews.UI.newsListScreen.adapter.PagingAdapter;
 import com.mironenko.dounews.databinding.FragmentNewsListBinding;
-import com.mironenko.dounews.model.api.Article;
+import com.mironenko.dounews.model.local.Article;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -30,12 +33,13 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
         SwipeRefreshLayout.OnRefreshListener,
         PagingAdapter.PagingUpdateListener {
 
-    private static final String KEY_SCROLL_STATE = "Key scroll view";
+    @Inject
+    INewsListContract.IPresenter listPresenter;
+    @Inject
+    PagingAdapter pagingAdapter;
+    private LinearLayoutManager layoutManager;
     private final String KEY_URL_NEWS = "Url news";
     private FragmentNewsListBinding binding;
-    private final INewsListContract.IPresenter listPresenter = NewsListPresenter.getInstance();
-    private PagingAdapter pagingAdapter;
-    private LinearLayoutManager layoutManager;
 
     public static NewsListFragment newInstance() {
         Bundle args = new Bundle();
@@ -45,56 +49,57 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        DouNewsApp.get().getFragmentComponent().injectNewsListFragment(this);
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("RxLifeCycle", "onCreate " + savedInstanceState);
         super.onCreate(savedInstanceState);
-        pagingAdapter = new PagingAdapter(this);
+//        pagingAdapter = new PagingAdapter();
+        pagingAdapter.setListener(this);
 
         if (savedInstanceState == null) {
-            if (listPresenter.getNews() == 0) {
+            if (listPresenter.getBaseSize() == 0) {
                 listPresenter.downloadArticles();
             }
         }
-        listPresenter.getAllBase(Article.class)
-                .subscribe(new Observer<List<Article>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        listPresenter.getNews().subscribe(new Observer<List<Article>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
 
-                    }
+            @Override
+            public void onNext(List<Article> articleList) {
+                pagingAdapter.setArticleList(articleList);
+                updateAdapter();
+            }
 
-                    @Override
-                    public void onNext(List<Article> articleList) {
-                        pagingAdapter.setArticleList(articleList);
-                    }
+            @Override
+            public void onError(Throwable e) {
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            @Override
+            public void onComplete() {
+            }
+        });
 
         pagingAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("RxLifeCycle", "onCreateView");
         binding = FragmentNewsListBinding.inflate(inflater, container, false);
 
         listPresenter.attachView(this);
         layoutManager = new LinearLayoutManager(requireContext());
 
+
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(pagingAdapter);
-
 
         binding.swipeRefresh.setOnRefreshListener(this);
         return binding.getRoot();
@@ -123,13 +128,14 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
 
     @Override
     public void onRefresh() {
-        listPresenter.refreshNews();
+        listPresenter.refreshArticles();
     }
 
     @Override
     public void onDestroyView() {
         binding = null;
         listPresenter.detachView();
+//        DouNewsApp.get().clearFragmentComponent();
         super.onDestroyView();
     }
 
