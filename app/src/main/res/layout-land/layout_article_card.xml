@@ -39,13 +39,13 @@
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/title_news"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textColor="@color/title_text_color"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/margin_horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/iv_author"
                 app:layout_constraintEnd_toEndOf="@id/margin_end"
                 app:layout_constraintStart_toStartOf="@+id/center"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +58,7 @@
                 android:layout_marginTop="5dp"
                 android:src="@drawable/round_face_24"
                 app:layout_constraintStart_toStartOf="@+id/center"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+                app:layout_constraintTop_toBottomOf="@+id/margin_horizontal" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -104,7 +104,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/margin_end"
                 app:layout_constraintStart_toStartOf="@+id/center"
-                app:layout_constraintTop_toBottomOf="@+id/tv_count" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_pageViews" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/date"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/margin_end"
+                app:layout_constraintStart_toStartOf="@+id/center"
+                app:layout_constraintTop_toBottomOf="@id/tv_tags" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/margin_end"
@@ -125,7 +140,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.6" />
+                app:layout_constraintGuide_percent="0.5" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
