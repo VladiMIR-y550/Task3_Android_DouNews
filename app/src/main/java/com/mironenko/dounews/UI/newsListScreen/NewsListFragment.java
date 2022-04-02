@@ -57,7 +57,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        pagingAdapter = new PagingAdapter();
         pagingAdapter.setListener(this);
 
         if (savedInstanceState == null) {
@@ -135,7 +134,6 @@ public class NewsListFragment extends Fragment implements INewsListContract.IVie
     public void onDestroyView() {
         binding = null;
         listPresenter.detachView();
-//        DouNewsApp.get().clearFragmentComponent();
         super.onDestroyView();
     }
 

@@ -39,7 +39,6 @@ public class LocalDataBase implements ILocalDataBase {
 
     @Override
     public void saveInDB(ArticlesNewsList articlesNewsList) {
-        realm = Realm.getDefaultInstance();
         for (ArticleObj articleObj : articlesNewsList.getResults()) {
             try {
                 if (!realm.isInTransaction()) {
