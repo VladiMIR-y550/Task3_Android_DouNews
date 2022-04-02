@@ -81,13 +81,7 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.NewsViewHo
                 itemBinding.tvName.setText(item.getAuthorName());
                 itemBinding.tvCount.setText(String.valueOf(item.getPageviews()));
                 itemBinding.tvTags.setText(item.getTags());
-<<<<<<< HEAD
-//                itemBinding.tvDate.setText(item.getPublished().toString());
-=======
-                if (itemBinding.tvDate != null) {
-                    itemBinding.tvDate.setText(item.getPublished());
-                }
->>>>>>> developer-15.02
+                itemBinding.tvDate.setText(item.getPublished().toString());
                 Glide.with(context)
                         .load(item.getImgBig2x())
                         .into(itemBinding.ivTitle);

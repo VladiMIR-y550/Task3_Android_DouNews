@@ -22,9 +22,6 @@ public class Article extends RealmObject {
     private String imgSmall2x;
     private String authorName;
     private String authorUrl;
-<<<<<<< HEAD
-    private Date published;
-=======
     private String published;
     private Date date;
 
@@ -35,7 +32,6 @@ public class Article extends RealmObject {
     public void setDate(Date date) {
         this.date = date;
     }
->>>>>>> developer-15.02
 
     public Integer getId() {
         return id;
@@ -157,19 +153,12 @@ public class Article extends RealmObject {
         this.authorUrl = authorUrl;
     }
 
-<<<<<<< HEAD
-    public Date getPublished() {
-        return published;
-    }
-
-    public void setPublished(Date published) {
-=======
     public String getPublished() {
         return published;
     }
 
     public void setPublished(String published) {
->>>>>>> developer-15.02
+
         this.published = published;
     }
 }
